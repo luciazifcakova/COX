@@ -248,7 +248,7 @@ if [ "${MERGE_ONLY}" != "true" ]; then
     # Assign taxonomy (best hit) with:
     # - bitscore filter
     # - taxdump-based rank mapping for nt
-    # - skip generic first hit like "... sp."
+    
     python /app/scripts/assign_lca.py \
       --input "${BLAST_OUT}" \
       --output "${OUTPUT_DIR}/03_taxonomy/${SAMPLE}_taxonomy.tsv" \
