@@ -22,3 +22,10 @@ Simplified main steps:
 3. extract_cluster_membership.py - Counts ACTUAL raw reads per consensus
 4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi nt)
 5. create finale taxonomy table
+
+
+use MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) 
+https://onlinelibrary.wiley.com/doi/10.1002/edn3.303
+
+#download longest representative sequnces from database in blast format to hpc
+wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
