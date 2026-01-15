@@ -1,0 +1,70 @@
+#array_merged_cox2.slurm 
+
+#!/bin/bash
+#SBATCH -J coi_submit
+#SBATCH -p compute
+#SBATCH -c 1
+#SBATCH --mem=4G
+#SBATCH -t 1:00:00
+#SBATCH -o logs/coi_submit.%j.out
+#SBATCH -e logs/coi_submit.%j.err
+
+ml bioinfo-ugrp-modules 
+ml DebianMed
+ml singularity
+
+set -euo pipefail
+
+echo "========================================"
+echo "COI Pipeline Job Submission"
+echo "========================================"
+echo "Job ID: $SLURM_JOB_ID"
+echo "Date: $(date)"
+echo "Input directory: /flash/MillerU/seqme_test/COX/Ukol"
+echo "Output directory: /flash/MillerU/seqme_test/COX"
+echo "Array size: 25 samples (0-24)"
+echo "========================================"
+
+# Create logs directory if it doesn't exist
+mkdir -p logs
+
+# Submit array job
+echo -n "Submitting array job... "
+ARRAY_JOB_ID=$(sbatch --parsable array_job.slurm)
+echo "ID: $ARRAY_JOB_ID"
+
+# Submit merge job with dependency
+echo -n "Submitting merge job... "
+MERGE_JOB_ID=$(sbatch --parsable --dependency=afterok:$ARRAY_JOB_ID merge_job.slurm)
+echo "ID: $MERGE_JOB_ID"
+
+echo "========================================"
+echo "Job submission complete!"
+echo "Array job ID: $ARRAY_JOB_ID"
+echo "Merge job ID: $MERGE_JOB_ID"
+echo ""
+echo "Job chain created:"
+echo "  Array jobs (0-24) → Merge job"
+echo ""
+echo "To check status:"
+echo "  squeue -u $USER"
+echo "  squeue -j $ARRAY_JOB_ID,$MERGE_JOB_ID"
+echo ""
+echo "To cancel the entire pipeline:"
+echo "  scancel $ARRAY_JOB_ID $MERGE_JOB_ID"
+echo ""
+echo "Output will be in:"
+echo "  /flash/MillerU/seqme_test/COX/{01_qc,02_consensus,03_taxonomy}"
+echo "========================================"
+
+# Save job IDs to a file for reference
+echo "$(date): Pipeline submitted" > logs/coi_pipeline_jobs.txt
+echo "Array job: $ARRAY_JOB_ID" >> logs/coi_pipeline_jobs.txt
+echo "Merge job: $MERGE_JOB_ID" >> logs/coi_pipeline_jobs.txt
+echo "" >> logs/coi_pipeline_jobs.txt
+echo "To monitor:" >> logs/coi_pipeline_jobs.txt
+echo "  squeue -j $ARRAY_JOB_ID,$MERGE_JOB_ID" >> logs/coi_pipeline_jobs.txt
+echo "  tail -f logs/coi.*.out" >> logs/coi_pipeline_jobs.txt
+
+echo "Job IDs saved to: logs/coi_pipeline_jobs.txt"
+echo "Submission script completed at: $(date)"
