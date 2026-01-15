@@ -1,0 +1,141 @@
+#array_job.slurm
+#!/bin/bash
+#SBATCH -J coi_array
+#SBATCH -p compute
+#SBATCH --array=0-24
+#SBATCH -c 16
+#SBATCH --mem=64G
+#SBATCH -t 24:00:00
+#SBATCH -o logs/coi_array.%A_%a.out
+#SBATCH -e logs/coi_array.%A_%a.err
+
+ml bioinfo-ugrp-modules
+ml DebianMed
+ml singularity
+
+set -euo pipefail
+mkdir -p logs
+
+# -------------------------
+# Container image
+# -------------------------
+IMG="/flash/MillerU/seqme_test/COX/cox_sandbox"
+
+# -------------------------
+# Host paths
+# -------------------------
+HOST_INPUT="/flash/MillerU/seqme_test/COX/Ukol"
+HOST_OUTPUT="/flash/MillerU/seqme_test/COX"
+HOST_DB="/bucket/MillerU/Zifcakova/seqme_test/midori2"
+
+# Whole nt BLAST db directory (contains nt.nsq / nt.nal, etc.)
+HOST_NT_DIR="/bucket/BioinfoUgrp/DB/blastDB/ncbi/2025-12-07-nt"
+
+# NCBI taxdump directory (nodes.dmp, names.dmp, merged.dmp, ...)
+HOST_TAXDUMP="/bucket/MillerU/Zifcakova/databases/taxdump"
+
+# -------------------------
+# Container mount points
+# -------------------------
+C_INPUT="/data/input"
+C_OUTPUT="/data/output"
+C_DB="/data/databases"
+C_NT="/data/nt"
+C_TAXDUMP="/data/taxdump"
+
+# -------------------------
+# Pipeline knobs
+# -------------------------
+MIN_BITSCORE="400"
+
+# -------------------------
+# Pick file for this array task
+# -------------------------
+mapfile -t FILES < <(
+  find "${HOST_INPUT}" -maxdepth 1 -type f \( -name "*.fastq" -o -name "*.fastq.gz" \) | sort
+)
+
+N=${#FILES[@]}
+if [ "${N}" -eq 0 ]; then
+  echo "ERROR: No .fastq/.fastq.gz files found in ${HOST_INPUT}" >&2
+  exit 1
+fi
+
+IDX="${SLURM_ARRAY_TASK_ID}"
+if [ "${IDX}" -ge "${N}" ]; then
+  echo "ERROR: SLURM_ARRAY_TASK_ID=${IDX} but only ${N} files found." >&2
+  exit 1
+fi
+
+HOST_SAMPLE_FILE="${FILES[$IDX]}"
+BASE="$(basename "${HOST_SAMPLE_FILE}")"
+SAMPLE_NAME="${BASE%.fastq.gz}"
+SAMPLE_NAME="${SAMPLE_NAME%.fastq}"
+
+echo "Array task:    ${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
+echo "Selected file: ${HOST_SAMPLE_FILE}"
+echo "Sample name:   ${SAMPLE_NAME}"
+echo "CPUs:          ${SLURM_CPUS_PER_TASK}"
+
+# -------------------------
+# Bind mounts
+# -------------------------
+BIND_ARGS=(
+  -B "${HOST_INPUT}:${C_INPUT}"
+  -B "${HOST_OUTPUT}:${C_OUTPUT}"
+  -B "${HOST_DB}:${C_DB}:ro"
+)
+
+# Mount nt DB (required for fallback)
+if [ -d "${HOST_NT_DIR}" ]; then
+  BIND_ARGS+=( -B "${HOST_NT_DIR}:${C_NT}:ro" )
+else
+  echo "WARNING: HOST_NT_DIR does not exist: ${HOST_NT_DIR} (nt fallback will be disabled)"
+fi
+
+# Mount taxdump (required for ranked taxonomy on nt fallback)
+if [ -d "${HOST_TAXDUMP}" ]; then
+  BIND_ARGS+=( -B "${HOST_TAXDUMP}:${C_TAXDUMP}:ro" )
+else
+  echo "WARNING: HOST_TAXDUMP does not exist: ${HOST_TAXDUMP} (nt fallback ranks will be incomplete)"
+fi
+
+# -------------------------
+# Environment variables into container
+# -------------------------
+ENV_ARGS=(
+  --env INPUT_DIR="${C_INPUT}"
+  --env OUTPUT_DIR="${C_OUTPUT}"
+  --env DB_DIR="${C_DB}"
+  --env THREADS="${SLURM_CPUS_PER_TASK}"
+  --env DO_FINAL_TABLE="false"
+  --env MERGE_ONLY="false"
+  --env SAMPLE_FILE="${C_INPUT}/${BASE}"
+  --env SAMPLE_NAME_OVERRIDE="${SAMPLE_NAME}"
+  --env REMOVE_PRIMERS="false"
+  --env MIN_IDENT="95"
+  --env MAX_EVALUE="1e-25"
+  --env MAX_TARGETS="10"
+  --env MIN_BITSCORE="400"
+)
+
+# Only enable nt fallback if nt DB is mounted AND looks like a BLAST db prefix
+# (expects files like /data/nt/nt.nsq or /data/nt/nt.nal)
+if [ -d "${HOST_NT_DIR}" ]; then
+  ENV_ARGS+=( --env NT_PREFIX="${C_NT}/nt" )
+fi
+
+# Provide taxdump dir (for ranked lineage mapping on nt hits)
+if [ -d "${HOST_TAXDUMP}" ]; then
+  ENV_ARGS+=( --env TAXDUMP_DIR="${C_TAXDUMP}" )
+fi
+
+# -------------------------
+# Run
+# -------------------------
+singularity exec --cleanenv \
+  "${BIND_ARGS[@]}" \
+  "${ENV_ARGS[@]}" \
+  "${IMG}" /bin/bash -lc "/app/scripts/run_coi_pipeline.sh"
+
+-lc "/app/scripts/run_coi_pipeline.sh"
