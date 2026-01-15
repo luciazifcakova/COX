@@ -6,11 +6,10 @@ Looking at this list of species, they appear to be connected by their associatio
 
 | Category | Example Species | Role/Concern |
 | :--- | :--- | :--- |
-| **Major Crop Pests** | `Ceresa bubalus`, `Aphrophora major`, `Palomena prasina`, `Coreus marginatus`| Direct damage to crops (orchards, vineyards). |
-| **Generalist Herbivores** | `Graphosoma italicum`,  | Feed on various cultivated plants. |
+| **Major Crop Pests** | `Ceresa bubalus`, `Aphrophora major`, `Palomena prasina`, `Coreus marginatus` | Direct damage to crops (orchards, vineyards). |
+| **Generalist Herbivores** | `Graphosoma italicum`, `Tropidothorax leucopterus`  | Feed on various cultivated plants. |
 | **Beneficials / Pollinators** | `Halictus tetrazonianellus`, `Vespula vulgaris` , `Myrmeleon formicarius` | Pollination and/or pest predation. |
-| **Disease Vectors** | `Lipoptena fortisetosa` , `Dictyophara europaea` | Potential vector for animal pathogens. |
-
+| **Disease Vectors** | `Lipoptena fortisetosa` , `Dictyophara europaea` | Potential vector for pathogens. |
 
 NGSpeciesID — species-first consensus pipeline
 
