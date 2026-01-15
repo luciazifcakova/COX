@@ -1,19 +1,15 @@
 # COX
 
-Looking at this list, **all the non-bird species** are **insects and other arthropods** (plus one snail), and they appear to be connected by their **association with plants** as pests, predators, or pollinators—making them highly relevant to **agriculture or ecosystem monitoring**.
+Probable purpose of the study: metabarcoding study of an agroecosystem or monitored natural habitat. The researcher likely extracted DNA from a bulk sample (like a trap catch) to get a snapshot of the local community.
+
+Looking at this list of species, they appear to be connected by their association with plants as pests, predators, or pollinators—making them highly relevant to agriculture or ecosystem monitoring.
 
 Here is a breakdown of the likely connections:
 
-### 🐛 Primary Connection: Agricultural/Environmental Significance
-Most of these species are either:
-1.  **Crop pests or beneficial insects** relevant to farming
-2.  **Bioindicators** for ecosystem health
-3.  **Invasive species** or **disease vectors**
-
 | Category | Example Species | Role/Concern |
 | :--- | :--- | :--- |
-| **Major Crop Pests** | `Ceresa bubalus` (Buffalo treehopper), `Aphrophora major` (Spittlebug) | Direct damage to crops (orchards, vineyards). |
-| **Generalist Herbivores** | `Palomena prasina` (Green shield bug), `Coreus marginatus` (Dock bug) | Feed on various cultivated plants. |
+| **Major Crop Pests** | `Ceresa bubalus`, `Aphrophora major`| Direct damage to crops (orchards, vineyards). |
+| **Generalist Herbivores** | `Palomena prasina`, `Coreus marginatus` (Dock bug) | Feed on various cultivated plants. |
 | **Beneficials / Pollinators** | `Halictus tetrazonianellus` (Sweat bee), `Vespula vulgaris` (Common wasp) | Pollination and/or pest predation. |
 | **Disease Vectors** | `Lipoptena fortisetosa` (Deer ked) | Potential vector for animal pathogens. |
 | **Ecosystem Bioindicators** | `Succinea putris` (Amber snail), `Myrmeleon formicarius` (Antlion) | Indicate soil moisture, habitat quality. |
