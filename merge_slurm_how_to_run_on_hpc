@@ -1,0 +1,29 @@
+#merge_job.slurm
+
+#!/bin/bash
+#SBATCH -J coi_merge
+#SBATCH -p compute
+#SBATCH -c 4
+#SBATCH --mem=16G
+#SBATCH -t 04:00:00
+#SBATCH -o logs/coi_merge.out
+#SBATCH -e logs/coi_merge.err
+
+set -euo pipefail
+mkdir -p logs
+
+ml bioinfo-ugrp-modules 
+ml DebianMed
+ml singularity
+
+IMG="/flash/MillerU/seqme_test/COX/cox_sandbox"
+HOST_OUTPUT="/flash/MillerU/seqme_test/COX"
+
+C_OUTPUT="/data/output"
+
+singularity exec --cleanenv \
+  -B "${HOST_OUTPUT}:${C_OUTPUT}" \
+  --env OUTPUT_DIR="${C_OUTPUT}" \
+  --env MERGE_ONLY="true" \
+  --env DO_FINAL_TABLE="true" \
+  "${IMG}" /bin/bash -lc "/app/scripts/run_coi_pipeline.sh"
