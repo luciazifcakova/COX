@@ -1,4 +1,5 @@
 #array_job.slurm
+
 #!/bin/bash
 #SBATCH -J coi_array
 #SBATCH -p compute
