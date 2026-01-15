@@ -39,16 +39,16 @@ Results - see  final_taxonomy_table file or short table here:
 | **S3155_008_8_14_Filtered** | 100% | 1,980 | Insecta | Orthoptera | Trigonidiidae | *Nemobius* | *Nemobius sylvestris* | <span style="color: #5cb85c;">Beneficial</span> |
 | **S3155_009_9_15_Filtered** | 99.8% | 238,813 | Arachnida | Trombidiformes | Trombidiidae | *Allothrombium* | *Allothrombium fuliginosum* | <span style="color: #5cb85c;">Beneficial</span> (pest control) |
 | **S3155_010_10_16_Filtered** | 98.1% | 259,004 | Insecta | Hemiptera | Pyrrhocoridae | *Pyrrhocoris* | *Pyrrhocoris apterus* | Not a pest |
-| **S3155_011_11_17_Filtered** | 99.4% | 148,121 | Insecta | Hemiptera | Membracidae | *Ceresa* | *Ceresa bubalus* | <span style="color: #d9534f;">**Pest**</span> |
+| **S3155_011_11_17_Filtered** | 99.4% | 148,121 | Insecta | Hemiptera | Membracidae | *Ceresa* | *Ceresa bubalus* | <span style="color: #d9534f;">Pest</span> |
 | **S3155_012_12_18_Filtered** | 99.8% | 222,171 | Insecta | Neuroptera | Myrmeleontidae | *Myrmeleon* | *Myrmeleon formicarius* | <span style="color: #5cb85c;">Beneficial</span> (pest control) |
 | **S3155_013_13_19_Filtered** | 98.6% | 244,797 | Insecta | Hemiptera | Lygaeidae | *Tropidothorax* | *Tropidothorax leucopterus* | Sap feeding |
-| **S3155_014_14_21_Filtered** | 100% | 97,348 | Insecta | Hemiptera | Coreidae | *Coreus* | *Coreus marginatus* | <span style="color: #d9534f;">**Pest**</span> |
+| **S3155_014_14_21_Filtered** | 100% | 97,348 | Insecta | Hemiptera | Coreidae | *Coreus* | *Coreus marginatus* | <span style="color: #d9534f;">Pest</span> |
 | **S3155_015_15_22_Filtered** | 98.8% | 270,061 | Insecta | Hymenoptera | Vespidae | *Vespula* | *Vespula vulgaris* | Not a pest |
-| **S3155_016_16_23_Filtered** | 98.9% | 215,679 | Insecta | Hemiptera | Pentatomidae | *Palomena* | *Palomena prasina* | <span style="color: #d9534f;">**Pest**</span> |
+| **S3155_016_16_23_Filtered** | 98.9% | 215,679 | Insecta | Hemiptera | Pentatomidae | *Palomena* | *Palomena prasina* | <span style="color: #d9534f;">Pest</span> |
 | **S3155_017_17_25_Filtered** | 98.4% | 105,132 | Insecta | Hymenoptera | Halictidae | *Halictus* | *Halictus tetrazonianellus* | <span style="color: #5cb85c;">Beneficial pollinator</span> |
-| **S3155_018_18_26_Filtered** | 98.3% | 259,546 | Insecta | Hymenoptera | Vespidae | *Vespa* | *Vespa crabro* | <span style="color: #d9534f;">**Pest**</span> |
-| **S3155_019_19_27_Filtered** | 98.7% | 215,166 | Arachnida | Araneae | Araneidae | *Araneus* | *Araneus quadratus* | <span style="color: #5cb85c;">**Beneficial**</span> (pest control) |
-| **S3155_020_20_28_Filtered** | 99.0% | 234,397 | Insecta | Hymenoptera | Vespidae | *Polistes* | *Polistes dominula* | <span style="color: #d9534f;">**Pest**</span> |
+| **S3155_018_18_26_Filtered** | 98.3% | 259,546 | Insecta | Hymenoptera | Vespidae | *Vespa* | *Vespa crabro* | <span style="color: #d9534f;">Pest</span> |
+| **S3155_019_19_27_Filtered** | 98.7% | 215,166 | Arachnida | Araneae | Araneidae | *Araneus* | *Araneus quadratus* | <span style="color: #5cb85c;">Beneficial</span> (pest control) |
+| **S3155_020_20_28_Filtered** | 99.0% | 234,397 | Insecta | Hymenoptera | Vespidae | *Polistes* | *Polistes dominula* | <span style="color: #d9534f;">Pest</span> |
 | **S3155_021_21_29_Filtered** | 98.0% | 235,690 | Arachnida | Opiliones | Phalangiidae | *Phalangium* | *Phalangium opilio* | <span style="color: #5cb85c;">Beneficial</span> |
 | **S3155_022_22_30_Filtered** | 97.0% | 232,867 | Insecta | Orthoptera | Acrididae | *Oedipoda* | *Oedipoda caerulescens* | <span style="color: #d9534f;">Pest</span> |
 | **S3155_023_23_41_Filtered** | 99.7% | 251,326 | Diplopoda | Julida | Julidae | *Megaphyllum* | *Megaphyllum unilineatum* | Not a pest |
