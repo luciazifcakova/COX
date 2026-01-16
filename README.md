@@ -23,7 +23,7 @@ Simplified main steps:
 NGSpeciesID — species-first consensus pipeline:
 Clusters long reads by similarity, builds species-level consensus sequences, polishes them (Racon / Medaka), outputs one consensus per cluster. Designed specifically for Nanopore barcoding, handles mixed species samples.
 
-use curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303), downloaded longest representative sequnces from database in blast format to hpc wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
+Used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303), downloaded longest representative sequnces from database in blast format to hpc wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
 
 Results - see  final_taxonomy_table file or short table here:
 
