@@ -27,7 +27,7 @@ use curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1
 
 Results - see  final_taxonomy_table file or short table here:
 
-| Sample ID | Confidence | Read Count | Class | Order | Family | Genus | Species | Notes |
+| Sample ID | Percent Identity | Read Count | Class | Order | Family | Genus | Species | Notes |
 |:---|:---:|:---:|:---|:---|:---|:---|:---|:---|
 | **S3155_001_1_3_Filtered** | 98.9% | 215,139 | Insecta | Orthoptera | Tettigoniidae | *Phaneroptera* | *Phaneroptera* sp. MAA-2007 | <span style="color: #d9534f;">Pest</span> (ID as *P. nana* via MIDORI2) |
 | **S3155_002_2_4_Filtered** | 99.4% | 225,818 | Insecta | Hemiptera | Pentatomidae | *Graphosoma* | *Graphosoma italicum* | Sap feeder |
