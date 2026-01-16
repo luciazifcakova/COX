@@ -1,0 +1,2 @@
+query	db_used	taxonomy	confidence	num_hits	best_pident	best_evalue	best_bitscore	best_accession	alignment_length	kingdom	kingdom_taxid	phylum	phylum_taxid	class	class_taxid	order	order_taxid	family	family_taxid	genus	genus_taxid	species	species_taxid
+consensus_cl_id_7_total_supporting_reads_162551	NT	Metazoa;Arthropoda;Insecta;Hemiptera;Aphrophoridae;Aphrophora;Aphrophora major	0.9913	5	99.13	0.0	1240.0	gi|2992466782|emb|OZ260570.1|	690	Metazoa	33208	Arthropoda	6656	Insecta	50557	Hemiptera	7524	Aphrophoridae	36666	Aphrophora	295200	Aphrophora major	2898095

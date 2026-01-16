@@ -1,0 +1,2 @@
+query	db_used	taxonomy	confidence	num_hits	best_pident	best_evalue	best_bitscore	best_accession	alignment_length	kingdom	kingdom_taxid	phylum	phylum_taxid	class	class_taxid	order	order_taxid	family	family_taxid	genus	genus_taxid	species	species_taxid
+consensus_cl_id_0+1_total_supporting_reads_84116+80557	NT	Metazoa;Arthropoda;Insecta;Diptera;Hippoboscidae;Lipoptena;Lipoptena fortisetosa	0.99843	10	99.843	0.0	1171.0	gi|1788949130|gb|MN807848.1|	637	Metazoa	33208	Arthropoda	6656	Insecta	50557	Diptera	7147	Hippoboscidae	81710	Lipoptena	170902	Lipoptena fortisetosa	633886

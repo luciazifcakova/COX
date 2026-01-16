@@ -1,0 +1,2 @@
+query	db_used	taxonomy	confidence	num_hits	best_pident	best_evalue	best_bitscore	best_accession	alignment_length	kingdom	kingdom_taxid	phylum	phylum_taxid	class	class_taxid	order	order_taxid	family	family_taxid	genus	genus_taxid	species	species_taxid
+consensus_cl_id_217+265_total_supporting_reads_56746+59899	NT	Metazoa;Mollusca;Gastropoda;Stylommatophora;Succineidae;Succinea;Succinea putris	1.0	10	100.0	0.0	1208.0	gi|930617789|gb|KT705746.1|	654	Metazoa	33208	Mollusca	6447	Gastropoda	6448	Stylommatophora	6527	Succineidae	73114	Succinea	145426	Succinea putris	145427
