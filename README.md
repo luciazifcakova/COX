@@ -17,7 +17,7 @@ Simplified main steps:
 1. QC with NanoFilt
 2. NGSpeciesID clustering
 3. extract_cluster_membership.py - Counts raw reads per consensus
-4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi nt)
+4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt)
 5. create finale taxonomy table
    
 NGSpeciesID — species-first consensus pipeline:
