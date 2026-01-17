@@ -22,7 +22,9 @@ Simplified main steps:
 3. extract_cluster_membership.py - Counts raw reads per consensus
 4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400
 5. create finale taxonomy table
-   
+
+The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large cohort processing while ensuring reproducibility and traceability of results.
+
 NGSpeciesID — species-first consensus pipeline:
 Clusters long reads by similarity, builds species-level consensus sequences, polishes them (Racon / Medaka), outputs one consensus per cluster. Designed specifically for Nanopore barcoding, handles mixed species samples.
 
