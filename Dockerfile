@@ -29,13 +29,14 @@ RUN micromamba config append channels conda-forge && \
       numpy \
       cutadapt \
       nanofilt \
+      nanoplot \
+      multiqc \
       minimap2 \
       samtools \
       racon \
       spoa \
       medaka=2.0.1 \
     && micromamba clean -a -y
-
 # Put the env first on PATH
 ENV PATH="/opt/micromamba/envs/coi_pipeline/bin:${PATH}"
 
@@ -64,12 +65,13 @@ ENV LANG=C.UTF-8
 RUN mkdir -p /data/input /data/output /data/databases
 
 # ---- Quick sanity checks (only what you actually use) ----
-RUN NGSpeciesID --help >/dev/null && \
+RUN NanoPlot --version >/dev/null && \
+    multiqc --version >/dev/null && \
+    NGSpeciesID --help >/dev/null && \
     medaka_consensus -h >/dev/null && \
     minimap2 --version >/dev/null && \
     samtools --version >/dev/null && \
     blastn -version >/dev/null && \
     python -c "import numpy,pandas; print('python env ok')"
-
 WORKDIR /data
 CMD ["/bin/bash"]
