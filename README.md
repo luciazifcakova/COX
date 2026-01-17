@@ -1,7 +1,7 @@
 # COX, COI, CO1
 Cytochrome c oxidase subunit I is a mitochondrial protein-coding marker widely used for DNA barcoding because it provides high species-level resolution across most metazoans due to its balance of conserved priming sites and rapidly evolving regions; however, its use is limited in some metazoa by incomplete reference databases, mitochondrial introgression and nuclear pseudogenes. Although COI is primarily used as an animal mitochondrial marker, homologs of cytochrome c oxidase subunit I are also present in intracellular bacteria such as Rickettsia because mitochondria originated from an alphaproteobacterial ancestor, and these bacteria retain a functional respiratory chain that includes cytochrome c oxidase for oxidative phosphorylation within the host cell.
 
-Probable purpose of the study: 
+## Probable purpose of the study: 
 
 Metabarcoding study of an agroecosystem or monitored natural habitat. DNA was likely extracted from a bulk sample (like a trap catch) to get a snapshot of the local community. The goal could have been to monitor biodiversity, track invasive species, or assess agricultural ecosystem health without needing to visually identify each specimen.
 
@@ -14,7 +14,7 @@ Looking at this list of species, they appear to be connected by their associatio
 | **Beneficials / Pollinators** | `Halictus tetrazonianellus`, `Vespula vulgaris` , `Myrmeleon formicarius` | Pollination and/or pest predation. |
 | **Disease Vectors** | `Lipoptena fortisetosa` , `Dictyophara europaea` | Potential vector for pathogens. |
 
-Pipeline logic:
+## Pipeline logic:
 run_coi_pipeline.sh (core orchestrator):
 Simplified main steps:
 1. QC with NanoFilt
@@ -30,9 +30,35 @@ Clusters long reads by similarity, builds species-level consensus sequences, pol
 
 Used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303), downloaded longest representative sequnces from database in blast format to hpc wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
 
-Results - see  final_taxonomy_table file for full results or short table here:
+Quality control and interpretation of COI signals:
+Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with conservative reporting when multiple high-scoring hits could not be resolved, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment. To reduce common COI artifacts, an important additional QC step (recommended for future iterations) is translation-based screening of consensus sequences to flag NUMTs/pseudogenes via stop codons/frameshifts and optional chimera detection, alongside negative controls to quantify cross-sample contamination in high-throughput workflows.
 
-| Sample ID | Percent Identity | Read Count supporting the species | Class | Order | Family | Genus | Species | Notes |
+Read length distributions showed a tight peak corresponding to the expected COI amplicon length, indicating successful primer amplification and minimal off-target products.
+Quality score distributions were consistent across samples and within acceptable ranges for Nanopore amplicon sequencing.
+Cluster structure (NGSpeciesID) showed strong dominance of a single consensus cluster per sample, as expected for samples dominated by one organism, with minor secondary clusters likely representing natural within species diversity.
+Read support per consensus was used as a confidence measure (supporting evidence), not as a proxy for organism abundance.
+QC outputs were preserved per sample and aggregated via MultiQC, providing both sample-level diagnostics and cohort-level overview suitable for production reporting.
+
+Full containerization (Docker) with pinned software versions ensures identical results across local, HPC, and cloud environments.
+Slurm-native execution model with:
+array jobs for per-sample processing
+a dedicated merge job for cohort-level summaries (MultiQC, final tables)
+Clear I/O contract:
+standardized directory layout
+per-sample logs
+stable final table schema for downstream reporting
+Modular design:
+NGSpeciesID clustering
+BLAST-based taxonomy
+explicit post-processing scripts (LCA assignment, cluster collapsing, table generation)
+Scalability: supports tens to hundreds of samples without race conditions or output collisions.
+
+
+## Results:
+
+See  final_taxonomy_table file for full results or short table here:
+
+| Sample ID | Percent Identity | Read count supporting a consensus cluster| Class | Order | Family | Genus | Species | Notes |
 |:---|:---:|:---:|:---|:---|:---|:---|:---|:---|
 | **S3155_001_1_3_Filtered** | 98.9% | 215,139 | Insecta | Orthoptera | Tettigoniidae | *Phaneroptera* | *Phaneroptera* sp. MAA-2007 | <span style="color: #d9534f;">Pest</span> (ID as *P. nana* via MIDORI2) |
 | **S3155_002_2_4_Filtered** | 99.4% | 225,818 | Insecta | Hemiptera | Pentatomidae | *Graphosoma* | *Graphosoma italicum* | Sap feeder |
