@@ -1,6 +1,9 @@
-# COX
+# COX, COI, CO1
+Cytochrome c oxidase subunit I is a mitochondrial protein-coding marker widely used for DNA barcoding because it provides high species-level resolution across most metazoans due to its balance of conserved priming sites and rapidly evolving regions; however, its use is limited in some metazoa by incomplete reference databases, mitochondrial introgression and nuclear pseudogenes. Although COI is primarily used as an animal mitochondrial marker, homologs of cytochrome c oxidase subunit I are also present in intracellular bacteria such as Rickettsia because mitochondria originated from an alphaproteobacterial ancestor, and these bacteria retain a functional respiratory chain that includes cytochrome c oxidase for oxidative phosphorylation within the host cell.
 
-Probable purpose of the study: metabarcoding study of an agroecosystem or monitored natural habitat. DNA was likely extracted from a bulk sample (like a trap catch) to get a snapshot of the local community. The goal could have been to monitor biodiversity, track invasive species, or assess agricultural ecosystem health without needing to visually identify each specimen.
+Probable purpose of the study: 
+
+Metabarcoding study of an agroecosystem or monitored natural habitat. DNA was likely extracted from a bulk sample (like a trap catch) to get a snapshot of the local community. The goal could have been to monitor biodiversity, track invasive species, or assess agricultural ecosystem health without needing to visually identify each specimen.
 
 Looking at this list of species, they appear to be connected by their association with plants as pests, predators, or pollinators—making them highly relevant to agriculture or ecosystem monitoring.
 
@@ -56,7 +59,7 @@ Results - see  final_taxonomy_table file or short table here:
 | **S3155_PK_COX_Filtered** | 97.7% | 256,275 | Aves | Charadriiformes | Charadriidae | *Charadrius* | *Charadrius hiaticula* | Positive control |
 
 
-Suggestion for further analyses:
+Suggestions for further analyses:
 
 Can we turn nanopore metabarcoding into recurring, high-margin revenue for the company?
 Clients pay for decisions, risk reduction, compliance, and trends over time.
