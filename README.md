@@ -3,9 +3,9 @@ Cytochrome c oxidase subunit I is a mitochondrial protein-coding marker widely u
 
 ## Probable purpose of the study: 
 
-Metabarcoding study of an agroecosystem or monitored natural habitat. DNA was likely extracted from a bulk sample (like a trap catch) to get a snapshot of the local community. The goal could have been to monitor biodiversity, track invasive species, or assess agricultural ecosystem health without needing to visually identify each specimen.
+This study seems like metabarcoding study of an agroecosystem or monitored natural habitat. DNA was likely extracted from a bulk sample (like a trap catch) to get a snapshot of the local community. The goal could have been to monitor biodiversity, track invasive species, or assess agricultural ecosystem health without needing to visually identify each specimen.
 
-Looking at this list of species, they appear to be connected by their association with plants as pests, predators, or pollinators—making them highly relevant to agriculture or ecosystem monitoring.
+Looking at this list of species, they appear to be connected by their association with plants as pests, predators, or pollinators—making them highly relevant to agricultural ecosystem monitoring.
 
 | Category | Example Species | Role/Concern |
 | :--- | :--- | :--- |
@@ -24,50 +24,21 @@ Simplified main steps:
 4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
 5. create finale taxonomy table
 
-The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large cohort processing while ensuring reproducibility and traceability of results.
+The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large scale processing while ensuring reproducibility and traceability of results. There is a Slurm-native execution model with array jobs for per-sample processing and dedicated merge job for cohort-level summaries (MultiQC, final tables). 
+Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with LCA reporting when multiple high-scoring hits were not same, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment.
 
-NGSpeciesID — species-first consensus pipeline:
-Clusters long reads by similarity, builds species-level consensus sequences, polishes them (Racon / Medaka), outputs one consensus per cluster. Designed specifically for Nanopore barcoding, handles mixed species samples.
+NGSpeciesID https://github.com/ksahlin/NGSpeciesID species-first consensus pipeline was used as it clusters long reads by similarity, builds species-level consensus sequences, polishes them (Medaka), outputs one consensus per cluster. Designed specifically for Nanopore barcoding, handles mixed species samples. NGSpeciesID reduces random sequencing errors and mitigates Nanopore-specific noise before taxonomic assignment.
 
-Used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303), downloaded longest representative sequnces from database in blast format to hpc wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
+I have used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303). Database of longest representative sequnces was downloaded from https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip, wich reduces partial-hit ambiguity typical of short COI fragments. As a fallback was used taxified ncbi-blast nt version 238, already rpesent on hpc. 
 
-##  Quality control and interpretation of COI signals:
 
-Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with conservative reporting when multiple high-scoring hits could not be resolved, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment. To reduce common COI artifacts, an important additional QC step (recommended for future iterations) is translation-based screening of consensus sequences to flag NUMTs/pseudogenes via stop codons/frameshifts and optional chimera detection, alongside negative controls to quantify cross-sample contamination in high-throughput workflows.
-
-Read length distributions showed a tight peak corresponding to the expected COI amplicon length, indicating successful primer amplification and minimal off-target products.
-Quality score distributions were consistent across samples and within acceptable ranges for Nanopore amplicon sequencing.
-Cluster structure (NGSpeciesID) showed strong dominance of a single consensus cluster per sample, as expected for samples dominated by one organism, with minor secondary clusters likely representing natural within species diversity.
-Read support per consensus was used as a confidence measure (supporting evidence), not as a proxy for organism abundance.
-QC outputs were preserved per sample and aggregated via MultiQC, providing both sample-level diagnostics and cohort-level overview suitable for production reporting.
-
-Several aspects of the analysis provide secondary support for assignment reliability:
-Consensus-first strategy (NGSpeciesID): species-level consensus generation reduces random sequencing errors and mitigates Nanopore-specific noise before taxonomic assignment.
-High read support per consensus: dominant clusters are supported by tens to hundreds of thousands of reads, making stochastic misassignment unlikely.
-Concordance with known ecology: identified species align with expected taxa for agricultural and semi-natural habitats, rather than implausible or unrelated organisms.
-Database choice (MIDORI2 longest): using full-length reference sequences improves alignment coverage and reduces partial-hit ambiguity typical of short COI fragments.
-Fallback strategy: nt fallback was implemented but rarely needed, indicating good coverage of the target taxa in MIDORI2.
-Known limitations (explicitly acknowledged):
-COI cannot fully resolve cases of mitochondrial introgression or cryptic species without nuclear markers.
-NUMTs and chimeras were not explicitly filtered via translation-based screening in this run (recommended as a future enhancement).
-Read counts are treated as support metrics, not absolute abundance.
-
-Full containerization (Docker) with pinned software versions ensures identical results across local, HPC, and cloud environments.
-Slurm-native execution model with:
-array jobs for per-sample processing
-a dedicated merge job for cohort-level summaries (MultiQC, final tables)
-Clear I/O contract:
-standardized directory layout
-per-sample logs
-stable final table schema for downstream reporting
-Modular design:
-NGSpeciesID clustering
-BLAST-based taxonomy
-explicit post-processing scripts (LCA assignment, cluster collapsing, table generation)
-Scalability: supports tens to hundreds of samples without race conditions or output collisions.
+## Limitations:
+COI cannot fully resolve cases of mitochondrial introgression or cryptic species without nuclear markers. NUMTs (Nuclear Mitochondrial DNA Segments - fragments of mitochondrial DNA inserted into the cell's nuclear genome) and chimeras were not explicitly filtered via translation-based screening in this run (recommended as a future enhancement).
 
 
 ## Results:
+
+Read length distributions showed a tight peak corresponding to the expected COI amplicon length, indicating successful primer amplification and minimal off-target products. Quality score distributions were consistent across samples and within acceptable ranges for Nanopore amplicon sequencing. Cluster structure (NGSpeciesID) showed strong dominance of a single consensus cluster per sample, as expected for samples dominated by one organism, with minor secondary clusters likely representing natural within species diversity. Read support per consensus was used as a confidence measure (supporting evidence), not as a proxy for organism abundance. QC outputs were preserved per sample and aggregated via MultiQC, providing both sample-level diagnostics and cohort-level overview suitable for production reporting. Fallback strategy via blast nt was implemented but rarely needed, indicating good coverage of the target taxa in MIDORI2.
 
 See  final_taxonomy_table file for full results or short table here:
 
