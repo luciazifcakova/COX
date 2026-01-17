@@ -15,12 +15,13 @@ Looking at this list of species, they appear to be connected by their associatio
 | **Disease Vectors** | `Lipoptena fortisetosa` , `Dictyophara europaea` | Potential vector for pathogens. |
 
 ## Pipeline logic:
+
 run_coi_pipeline.sh (core orchestrator):
 Simplified main steps:
-1. QC with NanoFilt
+1. QC with NanoFilt, NanoPlot, MultiQC
 2. NGSpeciesID clustering
 3. extract_cluster_membership.py - Counts raw reads per consensus
-4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400
+4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
 5. create finale taxonomy table
 
 The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large cohort processing while ensuring reproducibility and traceability of results.
@@ -30,7 +31,8 @@ Clusters long reads by similarity, builds species-level consensus sequences, pol
 
 Used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303), downloaded longest representative sequnces from database in blast format to hpc wget https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip
 
-Quality control and interpretation of COI signals:
+##  Quality control and interpretation of COI signals:
+
 Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with conservative reporting when multiple high-scoring hits could not be resolved, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment. To reduce common COI artifacts, an important additional QC step (recommended for future iterations) is translation-based screening of consensus sequences to flag NUMTs/pseudogenes via stop codons/frameshifts and optional chimera detection, alongside negative controls to quantify cross-sample contamination in high-throughput workflows.
 
 Read length distributions showed a tight peak corresponding to the expected COI amplicon length, indicating successful primer amplification and minimal off-target products.
@@ -38,6 +40,17 @@ Quality score distributions were consistent across samples and within acceptable
 Cluster structure (NGSpeciesID) showed strong dominance of a single consensus cluster per sample, as expected for samples dominated by one organism, with minor secondary clusters likely representing natural within species diversity.
 Read support per consensus was used as a confidence measure (supporting evidence), not as a proxy for organism abundance.
 QC outputs were preserved per sample and aggregated via MultiQC, providing both sample-level diagnostics and cohort-level overview suitable for production reporting.
+
+Several aspects of the analysis provide secondary support for assignment reliability:
+Consensus-first strategy (NGSpeciesID): species-level consensus generation reduces random sequencing errors and mitigates Nanopore-specific noise before taxonomic assignment.
+High read support per consensus: dominant clusters are supported by tens to hundreds of thousands of reads, making stochastic misassignment unlikely.
+Concordance with known ecology: identified species align with expected taxa for agricultural and semi-natural habitats, rather than implausible or unrelated organisms.
+Database choice (MIDORI2 longest): using full-length reference sequences improves alignment coverage and reduces partial-hit ambiguity typical of short COI fragments.
+Fallback strategy: nt fallback was implemented but rarely needed, indicating good coverage of the target taxa in MIDORI2.
+Known limitations (explicitly acknowledged):
+COI cannot fully resolve cases of mitochondrial introgression or cryptic species without nuclear markers.
+NUMTs and chimeras were not explicitly filtered via translation-based screening in this run (recommended as a future enhancement).
+Read counts are treated as support metrics, not absolute abundance.
 
 Full containerization (Docker) with pinned software versions ensures identical results across local, HPC, and cloud environments.
 Slurm-native execution model with:
@@ -86,7 +99,7 @@ See  final_taxonomy_table file for full results or short table here:
 | **S3155_024_24_42_Filtered** | 100% | 116,645 | Gastropoda | Stylommatophora | Succineidae | *Succinea* | *Succinea putris* | Possible pest |
 | **S3155_PK_COX_Filtered** | 97.7% | 256,275 | Aves | Charadriiformes | Charadriidae | *Charadrius* | *Charadrius hiaticula* | Positive control |
 
-Suggestions for further analyses:
+## Suggestions for further analyses:
 
 By using additional analyses, can we turn nanopore metabarcoding into recurring, high-margin revenue for the company?
 We can convert species detections into a Pest Risk Index, where weight species by economic damage, outbreak likelihood, regulatory relevance, vector status, invasivness. Beneficial vs pest balance metrics - using thing like ratios  of predator + parasitoid / herbivore, pollinator presence index, biocontrol capacity score. 
