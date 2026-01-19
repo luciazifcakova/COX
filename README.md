@@ -16,14 +16,14 @@ Looking at this list of species, they appear to be connected by their associatio
 
 ## Pipeline logic:
 
-run_coi_pipeline.sh (core orchestrator):
 Simplified main steps:
-1. QC with NanoFilt, NanoPlot, MultiQC
-2. NGSpeciesID clustering
-3. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
+1. run_coi_pipeline.sh - core orchestration, run QC with NanoFilt, NanoPlot, MultiQC, NGSpeciesID clustering, BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
 4. extract_cluster_membership.py - extract NGSpeciesID cluster membership (read counts per consensus) 
-5. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue.
-4. 
+5. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue, creates taxonomy.tsv
+6. collapse_taxonomy_if_same_species.py - collapse taxonomy.tsv to a single row only if all assigned consensus sequences
+resolve to the same species (species_taxid), and sum read_count across clusters. If species_taxid is missing, it will not collapse and unassigned rows are never used for collapsing.
+7. create_final_taxonomy_table.py - 
+
 
 
 The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large scale processing while ensuring reproducibility and traceability of results. There is a Slurm-native execution model with array jobs for per-sample processing and dedicated merge job for cohort-level summaries (MultiQC, final tables). 
