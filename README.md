@@ -21,7 +21,7 @@ Simplified main steps:
 1. QC with NanoFilt, NanoPlot, MultiQC
 2. NGSpeciesID clustering
 3. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
-4. extract_cluster_membership.py - Counts raw reads per consensus
+4. extract_cluster_membership.py - extract NGSpeciesID cluster membership (read counts per consensus) 
 5. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue.
 4. 
 
