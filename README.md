@@ -17,14 +17,12 @@ Looking at this list of species, they appear to be connected by their associatio
 ## Pipeline logic:
 
 Simplified main steps:
-1. run_coi_pipeline.sh - core orchestration, run QC with NanoFilt, NanoPlot, MultiQC, NGSpeciesID clustering, BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
-4. extract_cluster_membership.py - extract NGSpeciesID cluster membership (read counts per consensus) 
-5. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue, creates taxonomy.tsv
-6. collapse_taxonomy_if_same_species.py - collapse taxonomy.tsv to a single row only if all assigned consensus sequences
+1. run_coi_pipeline.sh - core orchestration, run QC with NanoFilt, NanoPlot, MultiQC, NGSpeciesID clustering, BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA).
+2. extract_cluster_membership.py - extract NGSpeciesID cluster membership (read counts per consensus)
+3. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue, creates taxonomy.tsv
+4. collapse_taxonomy_if_same_species.py - collapse taxonomy.tsv to a single row only if all assigned consensus sequences
 resolve to the same species (species_taxid), and sum read_count across clusters. If species_taxid is missing, it will not collapse and unassigned rows are never used for collapsing.
-7. create_final_taxonomy_table.py - 
-
-
+5. create_final_taxonomy_table.py - builds a single final_taxonomy_table.tsv from per-sample outputs (03_taxonomy/<sample>_taxonomy.tsv, 02_consensus/<sample>_clusters.tsv - attach read_count).
 
 The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large scale processing while ensuring reproducibility and traceability of results. There is a Slurm-native execution model with array jobs for per-sample processing and dedicated merge job for cohort-level summaries (MultiQC, final tables). 
 Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with LCA reporting when multiple high-scoring hits were not same, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment.
@@ -74,7 +72,7 @@ See  final_taxonomy_table file for full results or short table here:
 
 ## Suggestions for further analyses:
 
-By using additional analyses, can we turn nanopore metabarcoding into recurring, high-margin revenue for the company?
-We can convert species detections into a Pest Risk Index, where weight species by economic damage, outbreak likelihood, regulatory relevance, vector status, invasivness. Beneficial vs pest balance metrics - using thing like ratios  of predator + parasitoid / herbivore, pollinator presence index, biocontrol capacity score. 
+If we provide additional analyses, can we turn nanopore metabarcoding into recurring, high-margin revenue for the company?
+E.g., we can convert species detections into a Pest Risk Index, where weight species by economic damage, outbreak likelihood, regulatory relevance, vector status, invasivness. Beneficial vs pest balance metrics - using thing like ratios  of predator + parasitoid / herbivore, pollinator presence index, biocontrol capacity score. 
 Multiple sampling time points for trend and change detection can turn one-off sequencing into subscription monitoring. Pathogen and symbiont screening using the same samples to get extra information that can be presented as different dataset, host–plant interaction inference using archive DNA approach to answer "what are pests actually feeding on?". 
-Finally, these analyses enable the creation of long-term monitoring programs, client-specific data-viewing dashboards, predictive risk frameworks (If pest X appears at abundance Y what is the risk Z in T weeks of it damaging the crop W?), transforming single sequencing projects into durable, high-value service contracts.
+Finally, these analyses enable the creation of long-term monitoring programs, client-specific data-viewing dashboards, predictive risk frameworks (If pest X appears at abundance Y what is the risk Z in T weeks of it damaging the crop W?), transforming single sequencing projects into long-term service contracts.
