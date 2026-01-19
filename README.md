@@ -20,9 +20,11 @@ run_coi_pipeline.sh (core orchestrator):
 Simplified main steps:
 1. QC with NanoFilt, NanoPlot, MultiQC
 2. NGSpeciesID clustering
-3. extract_cluster_membership.py - Counts raw reads per consensus
-4. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
-5. create finale taxonomy table
+3. BLAST taxonomy assignment (MIDORI2 or fallback to ncbi238 nt), BLAST filters: pident>=95, evalue<=1e-25, max_targets=10, bitscore>400, if no species identified either way, fall back to lowest common ancestor (LCA)
+4. extract_cluster_membership.py - Counts raw reads per consensus
+5. assign_lca.py - reads BLAST output form Midori2 or ncbi/nt238, filters hits by min_identity, max_evalue, min_bitscore, selects best hit per query by pident desc, bitscore desc, evalue.
+4. 
+
 
 The workflow is fully containerized with pinned software versions, enabling deterministic reruns across HPC and local environments. All analytical steps are executed via Slurm-compatible scripts, supporting large scale processing while ensuring reproducibility and traceability of results. There is a Slurm-native execution model with array jobs for per-sample processing and dedicated merge job for cohort-level summaries (MultiQC, final tables). 
 Because COI datasets are typically PCR-amplified and derived from bulk mixed-organism samples, read counts supporting each NGSpeciesID consensus are interpreted as a sequencing/PCR signal rather than direct organism abundance. Taxonomic calls were assigned by filtered BLAST hits (pident ≥95, evalue ≤1e−25, bitscore >400) with LCA reporting when multiple high-scoring hits were not same, and species-level labels are treated as high-confidence only when identity and hit specificity support unambiguous assignment.
