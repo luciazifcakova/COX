@@ -29,7 +29,7 @@ Because COI datasets are typically PCR-amplified and derived from bulk mixed-org
 
 NGSpeciesID https://github.com/ksahlin/NGSpeciesID species-first consensus pipeline was used as it clusters long reads by similarity, builds species-level consensus sequences, polishes them (Medaka), outputs one consensus per cluster. Designed specifically for Nanopore barcoding, handles mixed species samples. NGSpeciesID reduces random sequencing errors and mitigates Nanopore-specific noise before taxonomic assignment.
 
-I have used curated, full 16S lenght MIDORI2 database for Cytochrome c oxidase subunit 1 (CO1) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303). Database of longest representative sequnces was downloaded from https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip, wich reduces partial-hit ambiguity typical of short COI fragments. As a fallback was used taxified ncbi-blast nt version 238, already rpesent on hpc. 
+I used a curated, full-length MIDORI2 database for cytochrome c oxidase subunit I (COI) (https://onlinelibrary.wiley.com/doi/10.1002/edn3.303). Database of longest representative sequnces was downloaded from https://www.reference-midori.info/download/Databases/GenBank268_2025-08-14/BLAST/longest/MIDORI2_LONGEST_NUC_GB268_CO1_BLAST.zip, wich reduces partial-hit ambiguity typical of short COI fragments. As a fallback was used taxified ncbi-blast nt version 238, already present on hpc. 
 
 
 ## Limitations:
@@ -42,7 +42,7 @@ Read length distributions showed a tight peak corresponding to the expected COI 
 
 See  final_taxonomy_table file for full results or short table here:
 
-| Sample ID | Percent Identity | Read count supporting a consensus cluster| Class | Order | Family | Genus | Species | Notes |
+| Sample ID | Percent Identity | Read count supporting a consensus cluster| Class | Order | Family | Genus | Species | Possible ecological role |
 |:---|:---:|:---:|:---|:---|:---|:---|:---|:---|
 | **S3155_001_1_3_Filtered** | 98.9% | 215,139 | Insecta | Orthoptera | Tettigoniidae | *Phaneroptera* | *Phaneroptera* sp. MAA-2007 | <span style="color: #d9534f;">Pest</span> (ID as *P. nana* via MIDORI2) |
 | **S3155_002_2_4_Filtered** | 99.4% | 225,818 | Insecta | Hemiptera | Pentatomidae | *Graphosoma* | *Graphosoma italicum* | Sap feeder |
@@ -70,9 +70,14 @@ See  final_taxonomy_table file for full results or short table here:
 | **S3155_024_24_42_Filtered** | 100% | 116,645 | Gastropoda | Stylommatophora | Succineidae | *Succinea* | *Succinea putris* | Possible pest |
 | **S3155_PK_COX_Filtered** | 97.7% | 256,275 | Aves | Charadriiformes | Charadriidae | *Charadrius* | *Charadrius hiaticula* | Positive control |
 
-## Suggestions for further analyses:
+## Possibilities for further analyses:
 
 If we provide additional analyses, can we turn nanopore metabarcoding into recurring, high-margin revenue for the company?
 E.g., we can convert species detections into a Pest Risk Index, where weight species by economic damage, outbreak likelihood, regulatory relevance, vector status, invasivness. Beneficial vs pest balance metrics - using thing like ratios  of predator + parasitoid / herbivore, pollinator presence index, biocontrol capacity score. 
 Multiple sampling time points for trend and change detection can turn one-off sequencing into subscription monitoring. Pathogen and symbiont screening using the same samples to get extra information that can be presented as different dataset, host–plant interaction inference using archive DNA approach to answer "what are pests actually feeding on?". 
 Finally, these analyses enable the creation of long-term monitoring programs, client-specific data-viewing dashboards, predictive risk frameworks (If pest X appears at abundance Y what is the risk Z in T weeks of it damaging the crop W?), transforming single sequencing projects into long-term service contracts.
+
+
+
+
+
