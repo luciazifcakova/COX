@@ -1,3 +1,42 @@
+#Nanopore COI marker Taxonomy Pipeline
+
+Reproducible long-read DNA-barcoding workflow for Oxford Nanopore sequencing.
+
+Technologies: Python · Bash · Docker · Slurm · BLAST · NGSpeciesID · MultiQC
+
+Processes raw FASTQ files through QC, consensus generation, taxonomic assignment and cohort-level reporting. Designed for parallel execution on HPC with containerized dependencies.
+
+What this project demonstrates:
+Pipeline design · NGS analysis · Python/Bash development · HPC parallelization · containerization · taxonomy algorithms · reproducible reporting
+
+
+                       ┌──────────────┐
+FASTQ ──► QC ─────────►│ NGSpeciesID  │
+                       │  consensus   │
+                       └──────┬───────┘
+                              │
+                              ▼
+                      MIDORI2 BLAST
+                              │
+                      no confident hit
+                              │
+                              ▼
+                         NCBI nt
+                              │
+                              ▼
+                       taxonomy/LCA
+                              │
+                              ▼
+                    final taxonomy table
+                              │
+                     ┌────────┴────────┐
+                     ▼                 ▼
+                  MultiQC          QC reports
+
+        Docker container + Slurm array execution
+
+
+
 # COX, COI, CO1
 Cytochrome c oxidase subunit I is a mitochondrial protein-coding marker widely used for DNA barcoding because it provides high species-level resolution across most metazoans due to its balance of conserved priming sites and rapidly evolving regions; however, its use is limited in some metazoa by incomplete reference databases, mitochondrial introgression and nuclear pseudogenes. Although COI is primarily used as an animal mitochondrial marker, homologs of cytochrome c oxidase subunit I are also present in intracellular bacteria such as Rickettsia because mitochondria originated from an alphaproteobacterial ancestor, and these bacteria retain a functional respiratory chain that includes cytochrome c oxidase for oxidative phosphorylation within the host cell.
 
