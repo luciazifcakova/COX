@@ -53,8 +53,6 @@ flowchart LR
     F --> G
     G --> H
     B -.-> I
-
-Docker container + Slurm array execution
 ```
         
 
