@@ -9,6 +9,41 @@ Processes raw FASTQ files through QC, consensus generation, taxonomic assignment
 What this project demonstrates:
 Pipeline design · NGS analysis · Python/Bash development · HPC parallelization · containerization · taxonomy algorithms · reproducible reporting
 
+```mermaid
+flowchart LR
+
+    subgraph INPUT["Input"]
+        A[FASTQ files]
+    end
+
+    subgraph PROCESSING["Sequence processing"]
+        B[QC]
+        C[NGSpeciesID<br/>clustering & consensus]
+    end
+
+    subgraph TAXONOMY["Taxonomic assignment"]
+        D[MIDORI2 BLAST]
+        E{Confident<br/>assignment?}
+        F[NCBI nt BLAST]
+        G[Taxonomy / LCA]
+    end
+
+    subgraph OUTPUT["Outputs"]
+        H[Final taxonomy table]
+        I[MultiQC report]
+    end
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E -->|Yes| G
+    E -->|No| F
+    F --> G
+    G --> H
+    B -.-> I
+```
+
                        ┌──────────────┐
 FASTQ ──► QC ─────────►│ NGSpeciesID  │
                        │  consensus   │
