@@ -1,13 +1,23 @@
-# Nanopore COI marker Taxonomy Pipeline
+# Nanopore COI Marker Taxonomy Pipeline
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Docker](https://img.shields.io/badge/Container-Docker-blue)
+![Slurm](https://img.shields.io/badge/HPC-Slurm-green)
+![Nanopore](https://img.shields.io/badge/Sequencing-Oxford%20Nanopore-purple)
 
 Reproducible long-read DNA-barcoding workflow for Oxford Nanopore sequencing.
 
-Technologies: Python · Bash · Docker · Slurm · BLAST · NGSpeciesID · MultiQC
+## What this project demonstrates
 
-Processes raw FASTQ files through QC, consensus generation, taxonomic assignment and cohort-level reporting. Designed for parallel execution on HPC with containerized dependencies.
+- **Bioinformatics pipeline design**
+- **Python and Bash development**
+- **HPC parallelization with Slurm**
+- **Containerized reproducibility with Docker**
+- **Long-read NGS analysis**
+- **Taxonomic assignment and fallback logic**
+- **Automated QC and reporting**
 
-What this project demonstrates:
-Pipeline design · NGS analysis · Python/Bash development · HPC parallelization · containerization · taxonomy algorithms · reproducible reporting
+## Workflow
 
 ```mermaid
 flowchart LR
@@ -42,33 +52,9 @@ flowchart LR
     F --> G
     G --> H
     B -.-> I
+
+Docker container + Slurm array execution
 ```
-
-                       ┌──────────────┐
-FASTQ ──► QC ─────────►│ NGSpeciesID  │
-                       │  consensus   │
-                       └──────┬───────┘
-                              │
-                              ▼
-                      MIDORI2 BLAST
-                              │
-                      no confident hit
-                              │
-                              ▼
-                         NCBI nt
-                              │
-                              ▼
-                       taxonomy/LCA
-                              │
-                              ▼
-                    final taxonomy table
-                              │
-                     ┌────────┴────────┐
-                     ▼                 ▼
-                  MultiQC          QC reports
-
-        Docker container + Slurm array execution
-
         
 
 # COX, COI, CO1
